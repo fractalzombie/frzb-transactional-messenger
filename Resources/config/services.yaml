@@ -1,0 +1,15 @@
+services: &services
+  _defaults: &defaults
+    autowire: true
+    autoconfigure: true
+  
+  FRZB\Component\TransactionalMessenger\:
+    resource: '../../{MessageBus,EventListener}/**'
+    exclude: '../../{Helper,Attribute,Enum,Event,ValueObject,Exception,Tests}/**'
+
+when@test:
+  services:
+    <<: *services
+    _defaults:
+      <<: *defaults
+      public: true
