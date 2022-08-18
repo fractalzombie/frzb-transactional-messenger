@@ -23,4 +23,9 @@ final class PendingEnvelope
     {
         return AttributeHelper::getAttribute($this->envelope->getMessage(), Transactional::class);
     }
+
+    public function getMessageClass(): string
+    {
+        return $this->envelope->getMessage()::class;
+    }
 }

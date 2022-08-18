@@ -6,11 +6,9 @@ namespace FRZB\Component\TransactionalMessenger\MessageBus;
 
 use FRZB\Component\DependencyInjection\Attribute\AsDecorator;
 use FRZB\Component\DependencyInjection\Attribute\AsService;
-use FRZB\Component\TransactionalMessenger\Attribute\Transactional;
 use FRZB\Component\TransactionalMessenger\Enum\CommitType;
 use FRZB\Component\TransactionalMessenger\Event\DispatchFailedEvent;
 use FRZB\Component\TransactionalMessenger\Event\DispatchSucceedEvent;
-use FRZB\Component\TransactionalMessenger\Helper\AttributeHelper;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
 use FRZB\Component\TransactionalMessenger\Helper\TransactionHelper;
 use FRZB\Component\TransactionalMessenger\Storage\Storage as StorageImpl;
@@ -52,9 +50,11 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
     public function dispatch(object $message, array $stamps = []): Envelope
     {
         $envelope = EnvelopeHelper::wrap($message);
-        $isTransactional = AttributeHelper::hasAttribute($envelope->getMessage(), Transactional::class);
 
-        $isTransactional ? $this->pendingStorage->append(new PendingEnvelope($envelope)) : $this->dispatchEnvelope($envelope);
+        TransactionHelper::isTransactional($message)
+            ? $this->pendingStorage->append(new PendingEnvelope($envelope))
+            : $this->dispatchEnvelope($envelope)
+        ;
 
         return $envelope;
     }
