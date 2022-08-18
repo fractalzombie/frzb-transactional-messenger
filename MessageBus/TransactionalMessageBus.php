@@ -12,6 +12,7 @@ use FRZB\Component\TransactionalMessenger\Event\DispatchFailedEvent;
 use FRZB\Component\TransactionalMessenger\Event\DispatchSucceedEvent;
 use FRZB\Component\TransactionalMessenger\Helper\AttributeHelper;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
+use FRZB\Component\TransactionalMessenger\Helper\TransactionHelper;
 use FRZB\Component\TransactionalMessenger\Storage\Storage as StorageImpl;
 use FRZB\Component\TransactionalMessenger\Storage\StorageInterface as Storage;
 use FRZB\Component\TransactionalMessenger\ValueObject\FailedEnvelope;
@@ -84,16 +85,16 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
 
     private function dispatchPendingEnvelopes(CommitType ...$commitTypes): void
     {
-        $notExecutedEnvelopes = new StorageImpl();
+        $notAllowedForDispatchEnvelopes = new StorageImpl();
 
         while ($pendingEnvelope = $this->pendingStorage->next()) {
-            \in_array($pendingEnvelope->getAttribute()->commitType, $commitTypes)
+            TransactionHelper::isDispatchAllowed($pendingEnvelope, ...$commitTypes)
                 ? $this->dispatchEnvelope($pendingEnvelope->envelope)
-                : $notExecutedEnvelopes->prepend($pendingEnvelope)
+                : $notAllowedForDispatchEnvelopes->prepend($pendingEnvelope)
             ;
         }
 
-        $this->pendingStorage->prepend(...$notExecutedEnvelopes->list());
+        $this->pendingStorage->prepend(...$notAllowedForDispatchEnvelopes->list());
     }
 
     private function dispatchSucceedEnvelopes(): void

@@ -79,7 +79,7 @@ final class TransactionalMessageBusCommitTest extends TestCase
         ;
 
         $envelope = $this->messageBus->dispatch($message);
-        $this->messageBus->commit(AttributeHelper::getAttribute($message, Transactional::class)->commitType);
+        $this->messageBus->commit(...AttributeHelper::getAttribute($message, Transactional::class)->commitTypes);
 
         self::assertSame(spl_object_hash($message), spl_object_hash($envelope->getMessage()));
         self::assertSame($pendingCount, $this->pendingStorage->count());
