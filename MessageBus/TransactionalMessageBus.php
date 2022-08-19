@@ -9,6 +9,7 @@ use FRZB\Component\DependencyInjection\Attribute\AsService;
 use FRZB\Component\TransactionalMessenger\Enum\CommitType;
 use FRZB\Component\TransactionalMessenger\Event\DispatchFailedEvent;
 use FRZB\Component\TransactionalMessenger\Event\DispatchSucceedEvent;
+use FRZB\Component\TransactionalMessenger\Exception\MessageBusException;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
 use FRZB\Component\TransactionalMessenger\Helper\TransactionHelper;
 use FRZB\Component\TransactionalMessenger\Storage\Storage as StorageImpl;
@@ -62,9 +63,13 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
     /** {@inheritdoc} */
     public function commit(CommitType ...$commitTypes): void
     {
-        $this->dispatchPendingEnvelopes(...$commitTypes);
-        $this->dispatchSucceedEnvelopes();
-        $this->dispatchFailedEnvelopes();
+        try {
+            $this->dispatchPendingEnvelopes(...$commitTypes);
+            $this->dispatchSucceedEnvelopes();
+            $this->dispatchFailedEnvelopes();
+        } catch (\Throwable $e) {
+            throw MessageBusException::fromThrowable($e);
+        }
     }
 
     /** {@inheritdoc} */
@@ -76,7 +81,11 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
             ),
         );
 
-        $this->dispatchFailedEnvelopes();
+        try {
+            $this->dispatchFailedEnvelopes();
+        } catch (\Throwable $e) {
+            throw MessageBusException::fromThrowable($e);
+        }
 
         $this->pendingStorage->clear();
         $this->succeedStorage->clear();
@@ -88,7 +97,7 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
         $notAllowedForDispatchEnvelopes = new StorageImpl();
 
         while ($pendingEnvelope = $this->pendingStorage->next()) {
-            TransactionHelper::isDispatchAllowed($pendingEnvelope, ...$commitTypes)
+            TransactionHelper::isDispatchAllowed($pendingEnvelope->getMessageClass(), ...$commitTypes)
                 ? $this->dispatchEnvelope($pendingEnvelope->envelope)
                 : $notAllowedForDispatchEnvelopes->prepend($pendingEnvelope)
             ;

@@ -18,23 +18,23 @@ final class TransactionHelper
     {
     }
 
-    public static function isTransactional(object $message): bool
+    public static function isTransactional(string|object $target): bool
     {
-        return AttributeHelper::hasAttribute($message, Transactional::class);
+        return AttributeHelper::hasAttribute($target, Transactional::class);
     }
 
-    public static function isDispatchAllowed(PendingEnvelope $envelope, CommitType ...$commitTypes): bool
+    public static function getTransactional(string|object $target): array
     {
-        $attributes = AttributeHelper::getAttributes($envelope->getMessageClass(), Transactional::class);
-        $allowedCommitTypes = ArrayList::collect($attributes)
+        return AttributeHelper::getAttributes($target, Transactional::class);
+    }
+
+    public static function isDispatchAllowed(string|object $target, CommitType ...$commitTypes): bool
+    {
+        return ArrayList::collect(self::getTransactional($target))
             ->map(static fn (Transactional $t) => $t->commitTypes)
             ->reduce(array_merge(...))
-            ->getOrElse([])
-        ;
-
-        return ArrayList::collect($allowedCommitTypes)
-            ->filter(static fn (CommitType $ct) => \in_array($ct, $commitTypes, true))
-            ->isNonEmpty()
+            ->toArrayList(static fn (array $cts) => ArrayList::collect($cts))
+            ->every(static fn (CommitType $ct) => \in_array($ct, $commitTypes, true))
         ;
     }
 }

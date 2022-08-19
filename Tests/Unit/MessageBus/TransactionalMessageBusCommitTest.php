@@ -7,6 +7,7 @@ namespace FRZB\Component\TransactionalMessenger\Tests\Unit\MessageBus;
 use FRZB\Component\TransactionalMessenger\Attribute\Transactional;
 use FRZB\Component\TransactionalMessenger\Event\DispatchFailedEvent;
 use FRZB\Component\TransactionalMessenger\Event\DispatchSucceedEvent;
+use FRZB\Component\TransactionalMessenger\Exception\MessageBusException;
 use FRZB\Component\TransactionalMessenger\Helper\AttributeHelper;
 use FRZB\Component\TransactionalMessenger\Helper\ClassHelper;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
@@ -56,9 +57,10 @@ final class TransactionalMessageBusCommitTest extends TestCase
         int $failedCount,
         int $expectsDecoratedDispatcher,
         int $expectsEventDispatcher,
-        bool $isThrows,
+        bool $isDecoratedBusThrows,
+        bool $isEventDispatcherThrows,
     ): void {
-        if ($isThrows) {
+        if ($isDecoratedBusThrows) {
             $this->decoratedBus
                 ->expects(self::exactly($expectsDecoratedDispatcher))
                 ->method('dispatch')
@@ -72,11 +74,21 @@ final class TransactionalMessageBusCommitTest extends TestCase
             ;
         }
 
-        $this->eventDispatcher
-            ->expects(self::exactly($expectsEventDispatcher))
-            ->method('dispatch')
-            ->willReturnCallback(fn (object $event) => self::assertInstanceOf($eventClass, $event))
-        ;
+        if ($isEventDispatcherThrows) {
+            $this->eventDispatcher
+                ->expects(self::exactly($expectsEventDispatcher))
+                ->method('dispatch')
+                ->willReturnCallback(fn (object $event) => self::assertInstanceOf($eventClass, $event))
+            ;
+        } else {
+            $this->eventDispatcher
+                ->expects(self::exactly($expectsEventDispatcher))
+                ->method('dispatch')
+                ->willThrowException(new \Exception('Something goes wrong'))
+            ;
+
+            $this->expectException(MessageBusException::class);
+        }
 
         $envelope = $this->messageBus->dispatch($message);
         $this->messageBus->commit(...AttributeHelper::getAttribute($message, Transactional::class)->commitTypes);
@@ -97,7 +109,8 @@ final class TransactionalMessageBusCommitTest extends TestCase
             'failed_count' => 0,
             'expects_decorated_dispatcher' => 1,
             'expects_event_dispatcher' => 1,
-            'is_throws' => false,
+            'is_decorated_bus_throws' => false,
+            'is_event_dispatcher_throws' => false,
         ];
 
         yield sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
@@ -108,7 +121,8 @@ final class TransactionalMessageBusCommitTest extends TestCase
             'failed_count' => 0,
             'expects_decorated_dispatcher' => 1,
             'expects_event_dispatcher' => 1,
-            'is_throws' => false,
+            'is_decorated_bus_throws' => false,
+            'is_event_dispatcher_throws' => false,
         ];
 
         yield sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
@@ -119,7 +133,8 @@ final class TransactionalMessageBusCommitTest extends TestCase
             'failed_count' => 0,
             'expects_decorated_dispatcher' => 1,
             'expects_event_dispatcher' => 1,
-            'is_throws' => false,
+            'is_decorated_bus_throws' => false,
+            'is_event_dispatcher_throws' => false,
         ];
 
         yield sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
@@ -130,7 +145,8 @@ final class TransactionalMessageBusCommitTest extends TestCase
             'failed_count' => 0,
             'expects_decorated_dispatcher' => 1,
             'expects_event_dispatcher' => 1,
-            'is_throws' => true,
+            'is_decorated_bus_throws' => true,
+            'is_event_dispatcher_throws' => false,
         ];
 
         yield sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
@@ -141,7 +157,8 @@ final class TransactionalMessageBusCommitTest extends TestCase
             'failed_count' => 0,
             'expects_decorated_dispatcher' => 1,
             'expects_event_dispatcher' => 1,
-            'is_throws' => true,
+            'is_decorated_bus_throws' => true,
+            'is_event_dispatcher_throws' => false,
         ];
 
         yield sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
@@ -152,7 +169,32 @@ final class TransactionalMessageBusCommitTest extends TestCase
             'failed_count' => 0,
             'expects_decorated_dispatcher' => 1,
             'expects_event_dispatcher' => 1,
-            'is_throws' => true,
+            'is_decorated_bus_throws' => true,
+            'is_event_dispatcher_throws' => false,
+        ];
+
+        yield sprintf('%s is failure commit when event dispatcher throws', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+            'message' => new TransactionalOnTerminateMessage(),
+            'event_class' => DispatchSucceedEvent::class,
+            'pending_count' => 0,
+            'succeed_count' => 0,
+            'failed_count' => 0,
+            'expects_decorated_dispatcher' => 1,
+            'expects_event_dispatcher' => 1,
+            'is_decorated_bus_throws' => false,
+            'is_event_dispatcher_throws' => true,
+        ];
+
+        yield sprintf('%s is failure commit when event dispatcher throws', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+            'message' => new TransactionalOnHandledMessage(),
+            'event_class' => DispatchFailedEvent::class,
+            'pending_count' => 0,
+            'succeed_count' => 0,
+            'failed_count' => 0,
+            'expects_decorated_dispatcher' => 1,
+            'expects_event_dispatcher' => 1,
+            'is_decorated_bus_throws' => true,
+            'is_event_dispatcher_throws' => true,
         ];
     }
 }

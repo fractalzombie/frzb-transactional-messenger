@@ -10,7 +10,7 @@ use JetBrains\PhpStorm\Immutable;
 #[Immutable]
 final class ClassHelper
 {
-    final public const DEFAULT_SHORT_NAME = 'NoName';
+    final public const DEFAULT_SHORT_NAME = 'InvalidClassName';
 
     private function __construct()
     {

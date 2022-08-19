@@ -17,7 +17,7 @@ final class AttributeHelper
 
     public static function hasAttribute(string|object $target, string $attributeClass): bool
     {
-        return null !== self::getAttribute($target, $attributeClass);
+        return !empty(self::getReflectionAttributes($target, $attributeClass));
     }
 
     /**
@@ -44,15 +44,25 @@ final class AttributeHelper
      */
     public static function getAttributes(string|object $target, string $attributeClass): array
     {
-        try {
-            $attributes = (new \ReflectionClass($target))->getAttributes($attributeClass);
-        } catch (\ReflectionException) {
-            $attributes = [];
-        }
-
-        return ArrayList::collect($attributes)
+        return ArrayList::collect(self::getReflectionAttributes($target, $attributeClass))
             ->map(static fn (\ReflectionAttribute $a) => $a->newInstance())
             ->toArray()
         ;
+    }
+
+    /**
+     * @template T
+     *
+     * @param class-string<T> $attributeClass
+     *
+     * @return array<\ReflectionAttribute<T>>
+     */
+    public static function getReflectionAttributes(string|object $target, string $attributeClass): array
+    {
+        try {
+            return (new \ReflectionClass($target))->getAttributes($attributeClass);
+        } catch (\ReflectionException) {
+            return [];
+        }
     }
 }
