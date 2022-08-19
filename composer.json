@@ -23,25 +23,15 @@
     ],
     "require": {
         "php": "^8.1",
-        "fp4php/functional": "^4.18",
-        "psr/container": "^1.1.1|^2.0",
-        "symfony/dependency-injection": "^5.4|^6",
-        "symfony/deprecation-contracts": "^2.5",
+        "fp4php/functional": "^4.19",
         "symfony/http-kernel": "^5.4|^6",
         "symfony/framework-bundle": "^v5.4|^6",
-        "symfony/service-contracts": "^1.1.6|^2|^3",
-        "symfony/serializer-pack": "^1.1",
-        "symfony/validator": "^5.4|^6",
         "symfony/event-dispatcher": "^5.4|^6",
         "frzb/dependency-injection": "^1.6",
         "symfony/yaml": "^5.4|^6",
-        "symfony/property-access": "^5.4|^6",
-        "symfony/uid": "^6",
-        "symfony/messenger": "^6"
+        "symfony/messenger": "^5.4|^6"
     },
     "require-dev": {
-        "symfony/config": "^5.4|^6",
-        "symfony/expression-language": "^5.4|^6",
         "phpunit/phpunit": "^10.0",
         "phpunit/php-code-coverage": "^10.0",
         "symfony/phpunit-bridge": "^5.4|^6",
