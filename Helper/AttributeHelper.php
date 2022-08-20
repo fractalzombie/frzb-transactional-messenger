@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FRZB\Component\TransactionalMessenger\Helper;
 
 use Fp\Collections\ArrayList;
+use Fp\Functional\Option\Option;
 use JetBrains\PhpStorm\Immutable;
 
 /** @internal */
@@ -59,10 +60,13 @@ final class AttributeHelper
      */
     public static function getReflectionAttributes(string|object $target, string $attributeClass): array
     {
-        try {
-            return (new \ReflectionClass($target))->getAttributes($attributeClass);
-        } catch (\ReflectionException) {
-            return [];
-        }
+        return Option::fromNullable(ClassHelper::getReflectionClass($target))
+            ->map(
+                static fn (\ReflectionClass $rClass) => Option::fromNullable(ClassHelper::getParentReflectionClass($rClass))
+                    ->map(static fn (\ReflectionClass $rClass) => [...ClassHelper::getReflectionAttributes($rClass, $attributeClass), ...self::getReflectionAttributes($rClass, $attributeClass)])
+                    ->getOrElse(ClassHelper::getReflectionAttributes($rClass, $attributeClass))
+            )
+            ->getOrElse([])
+        ;
     }
 }

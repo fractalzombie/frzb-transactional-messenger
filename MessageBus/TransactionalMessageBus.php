@@ -97,7 +97,7 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
         $notAllowedForDispatchEnvelopes = new StorageImpl();
 
         while ($pendingEnvelope = $this->pendingStorage->next()) {
-            TransactionHelper::isDispatchAllowed($pendingEnvelope->getMessageClass(), ...$commitTypes)
+            TransactionHelper::isDispatchable($pendingEnvelope->getMessageClass(), ...$commitTypes)
                 ? $this->dispatchEnvelope($pendingEnvelope->envelope)
                 : $notAllowedForDispatchEnvelopes->prepend($pendingEnvelope)
             ;

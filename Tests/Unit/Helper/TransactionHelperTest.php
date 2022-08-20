@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace FRZB\Component\TransactionalMessenger\Tests\Unit\Helper;
 
 use FRZB\Component\TransactionalMessenger\Enum\CommitType;
@@ -20,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 #[Group('transactional-messenger')]
 final class TransactionHelperTest extends TestCase
 {
-    #[DataProvider('transactionalDataProvider')]
+    #[DataProvider('transactionalProvider')]
     public function testIsTransactionalMethod(string $className, bool $isTransactional): void
     {
         self::assertSame($isTransactional, TransactionHelper::isTransactional($className));
@@ -35,13 +34,13 @@ final class TransactionHelperTest extends TestCase
         ;
     }
 
-    #[DataProvider('allowedDataProvider')]
-    public function getIsDispatchAllowedMethod(string $className, bool $isAllowed, array $commitTypes): void
+    #[DataProvider('dispatchableProvider')]
+    public function getIsDispatchableMethod(string $className, bool $isAllowed, array $commitTypes): void
     {
-        self::assertSame($isAllowed, TransactionHelper::isDispatchAllowed($className, ...$commitTypes));
+        self::assertSame($isAllowed, TransactionHelper::isDispatchable($className, ...$commitTypes));
     }
 
-    public function transactionalDataProvider(): iterable
+    public function transactionalProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,
@@ -69,7 +68,7 @@ final class TransactionHelperTest extends TestCase
         ];
     }
 
-    public function allowedDataProvider(): iterable
+    public function dispatchableProvider(): iterable
     {
         yield sprintf('%s is allowed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,

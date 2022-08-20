@@ -2,14 +2,11 @@
 
 declare(strict_types=1);
 
-
 namespace FRZB\Component\TransactionalMessenger\Tests\Unit\Helper;
 
 use FRZB\Component\TransactionalMessenger\Attribute\Transactional;
-use FRZB\Component\TransactionalMessenger\Enum\CommitType;
-use FRZB\Component\TransactionalMessenger\Helper\AttributeHelper;
 use FRZB\Component\TransactionalMessenger\Helper\ClassHelper;
-use FRZB\Component\TransactionalMessenger\Helper\TransactionHelper;
+use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\ExtendedTransactionalMessage;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\NonTransactionalMessage;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnHandledMessage;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnResponseMessage;
@@ -22,65 +19,163 @@ use PHPUnit\Framework\TestCase;
 #[Group('transactional-messenger')]
 final class ClassHelperTest extends TestCase
 {
-    #[DataProvider('dataProvider')]
-    public function testGetAttributesMethod(string $className, bool $hasAttributes): void
+    #[DataProvider('shortNameProvider')]
+    public function testGetShortNameMethod(string $className, string $shortClassName): void
     {
-        $hasAttributes
-            ? self::assertNotEmpty(AttributeHelper::getAttributes($className, Transactional::class))
-            : self::assertEmpty(AttributeHelper::getAttributes($className, Transactional::class))
+        self::assertSame($shortClassName, ClassHelper::getShortName($className));
+    }
+
+    #[DataProvider('reflectionProvider')]
+    public function testGetReflectionClassMethod(string $className, bool $isNull): void
+    {
+        $isNull
+            ? self::assertNull(ClassHelper::getReflectionClass($className))
+            : self::assertNotNull(ClassHelper::getReflectionClass($className))
         ;
     }
 
-    #[DataProvider('dataProvider')]
-    public function testGetAttributeMethod(string $className, bool $hasAttributes): void
+    #[DataProvider('parentReflectionProvider')]
+    public function testGetParentReflectionClassMethod(string $className, bool $isNull): void
     {
-        $hasAttributes
-            ? self::assertNotNull(AttributeHelper::getAttribute($className, Transactional::class))
-            : self::assertNull(AttributeHelper::getAttribute($className, Transactional::class))
+        $isNull
+            ? self::assertNull(ClassHelper::getParentReflectionClass($className))
+            : self::assertNotNull(ClassHelper::getParentReflectionClass($className))
         ;
     }
 
-    #[DataProvider('dataProvider')]
-    public function testGetReflectionAttributesMethod(string $className, bool $hasAttributes): void
+    #[DataProvider('reflectionAttributesProvider')]
+    public function testGetReflectionAttributesClassMethod(string $className, bool $isEmpty): void
     {
-        $hasAttributes
-            ? self::assertNotEmpty(AttributeHelper::getReflectionAttributes($className, Transactional::class))
-            : self::assertEmpty(AttributeHelper::getReflectionAttributes($className, Transactional::class))
+        $isEmpty
+            ? self::assertEmpty(ClassHelper::getReflectionAttributes($className, Transactional::class))
+            : self::assertNotEmpty(ClassHelper::getReflectionAttributes($className, Transactional::class))
         ;
     }
 
-    #[DataProvider('dataProvider')]
-    public function testHasAttributeMethod(string $className, bool $hasAttributes): void
-    {
-        self::assertSame($hasAttributes, AttributeHelper::hasAttribute($className, Transactional::class))
-        ;
-    }
-
-    public function dataProvider(): iterable
+    public function shortNameProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,
-            'has_attributes' => true,
+            'short_class_name' => 'TransactionalOnTerminateMessage',
         ];
 
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
             'class_name' => TransactionalOnResponseMessage::class,
-            'has_attributes' => true,
+            'short_class_name' => 'TransactionalOnResponseMessage',
         ];
 
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
             'class_name' => TransactionalOnHandledMessage::class,
-            'has_attributes' => true,
+            'short_class_name' => 'TransactionalOnHandledMessage',
         ];
 
         yield sprintf('%s', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
             'class_name' => NonTransactionalMessage::class,
-            'has_attributes' => false,
+            'short_class_name' => 'NonTransactionalMessage',
         ];
 
         yield 'InvalidClassName' => [
             'class_name' => 'InvalidClassName',
-            'has_attributes' => false,
+            'short_class_name' => 'InvalidClassName',
+        ];
+    }
+
+    public function reflectionProvider(): iterable
+    {
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+            'class_name' => TransactionalOnTerminateMessage::class,
+            'is_null' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+            'class_name' => TransactionalOnResponseMessage::class,
+            'is_null' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+            'class_name' => TransactionalOnHandledMessage::class,
+            'is_null' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(ExtendedTransactionalMessage::class)) => [
+            'class_name' => ExtendedTransactionalMessage::class,
+            'is_null' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
+            'class_name' => NonTransactionalMessage::class,
+            'is_null' => false,
+        ];
+
+        yield 'InvalidClassName' => [
+            'class_name' => 'InvalidClassName',
+            'is_null' => true,
+        ];
+    }
+
+    public function parentReflectionProvider(): iterable
+    {
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+            'class_name' => TransactionalOnTerminateMessage::class,
+            'is_null' => true,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+            'class_name' => TransactionalOnResponseMessage::class,
+            'is_null' => true,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+            'class_name' => TransactionalOnHandledMessage::class,
+            'is_null' => true,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(ExtendedTransactionalMessage::class)) => [
+            'class_name' => ExtendedTransactionalMessage::class,
+            'is_null' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
+            'class_name' => NonTransactionalMessage::class,
+            'is_null' => true,
+        ];
+
+        yield 'InvalidClassName' => [
+            'class_name' => 'InvalidClassName',
+            'is_null' => true,
+        ];
+    }
+
+    public function reflectionAttributesProvider(): iterable
+    {
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+            'class_name' => TransactionalOnTerminateMessage::class,
+            'is_empty' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+            'class_name' => TransactionalOnResponseMessage::class,
+            'is_empty' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+            'class_name' => TransactionalOnHandledMessage::class,
+            'is_empty' => false,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(ExtendedTransactionalMessage::class)) => [
+            'class_name' => ExtendedTransactionalMessage::class,
+            'is_empty' => true,
+        ];
+
+        yield sprintf('%s', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
+            'class_name' => NonTransactionalMessage::class,
+            'is_empty' => true,
+        ];
+
+        yield 'InvalidClassName' => [
+            'class_name' => 'InvalidClassName',
+            'is_empty' => true,
         ];
     }
 }
