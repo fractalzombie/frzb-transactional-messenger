@@ -78,16 +78,16 @@ final class TransactionalMessageBusCommitTest extends TestCase
             $this->eventDispatcher
                 ->expects(self::exactly($expectsEventDispatcher))
                 ->method('dispatch')
-                ->willReturnCallback(fn (object $event) => self::assertInstanceOf($eventClass, $event))
-            ;
-        } else {
-            $this->eventDispatcher
-                ->expects(self::exactly($expectsEventDispatcher))
-                ->method('dispatch')
                 ->willThrowException(new \Exception('Something goes wrong'))
             ;
 
             $this->expectException(MessageBusException::class);
+        } else {
+            $this->eventDispatcher
+                ->expects(self::exactly($expectsEventDispatcher))
+                ->method('dispatch')
+                ->willReturnCallback(fn (object $event) => self::assertInstanceOf($eventClass, $event))
+            ;
         }
 
         $envelope = $this->messageBus->dispatch($message);
@@ -97,6 +97,14 @@ final class TransactionalMessageBusCommitTest extends TestCase
         self::assertSame($pendingCount, $this->pendingStorage->count());
         self::assertSame($succeedCount, $this->succeedStorage->count());
         self::assertSame($failedCount, $this->failedStorage->count());
+    }
+
+    /** @throws \ReflectionException */
+    public function testPrivateDispatchEnvelopeMethod(): void
+    {
+        $envelope = EnvelopeHelper::wrap(new TransactionalOnTerminateMessage());
+
+        self::assertSame(spl_object_hash($envelope), spl_object_hash((new \ReflectionMethod($this->messageBus, 'dispatchEnvelope'))->invoke($this->messageBus, $envelope)));
     }
 
     public function dataProvider(): iterable

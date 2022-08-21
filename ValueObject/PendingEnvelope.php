@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace FRZB\Component\TransactionalMessenger\ValueObject;
 
+use FRZB\Component\TransactionalMessenger\Enum\CommitType;
+use FRZB\Component\TransactionalMessenger\Helper\TransactionHelper;
 use JetBrains\PhpStorm\Immutable;
 use Symfony\Component\Messenger\Envelope;
 
@@ -20,5 +22,10 @@ final class PendingEnvelope
     public function getMessageClass(): string
     {
         return $this->envelope->getMessage()::class;
+    }
+
+    public function isTransactional(CommitType ...$commitTypes): bool
+    {
+        return TransactionHelper::isDispatchable($this->getMessageClass(), ...$commitTypes);
     }
 }

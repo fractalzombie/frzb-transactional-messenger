@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FRZB\Component\TransactionalMessenger\Tests\Unit\MessageBus;
 
 use FRZB\Component\TransactionalMessenger\Event\DispatchFailedEvent;
+use FRZB\Component\TransactionalMessenger\Exception\MessageBusException;
 use FRZB\Component\TransactionalMessenger\Helper\ClassHelper;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
 use FRZB\Component\TransactionalMessenger\MessageBus\TransactionalMessageBus as TransactionalMessageBusImpl;
@@ -50,7 +51,8 @@ final class TransactionalMessageBusRollbackTest extends TestCase
         int $pendingCount,
         int $succeedCount,
         int $failedCount,
-        int $expectsEventDispatcher
+        int $expectsEventDispatcher,
+        bool $isEventDispatcherThrows,
     ): void {
         $this->decoratedBus
             ->expects(self::never())
@@ -58,11 +60,21 @@ final class TransactionalMessageBusRollbackTest extends TestCase
             ->willReturn(EnvelopeHelper::wrap($message))
         ;
 
-        $this->eventDispatcher
-            ->expects(self::exactly($expectsEventDispatcher))
-            ->method('dispatch')
-            ->willReturnCallback(fn (DispatchFailedEvent $event) => self::assertSame(spl_object_hash($message), spl_object_hash($event->envelope->envelope->getMessage())))
-        ;
+        if ($isEventDispatcherThrows) {
+            $this->eventDispatcher
+                ->expects(self::exactly($expectsEventDispatcher))
+                ->method('dispatch')
+                ->willThrowException(new \Exception('Something goes wrong'))
+            ;
+
+            $this->expectException(MessageBusException::class);
+        } else {
+            $this->eventDispatcher
+                ->expects(self::exactly($expectsEventDispatcher))
+                ->method('dispatch')
+                ->willReturnCallback(fn (DispatchFailedEvent $event) => self::assertSame(spl_object_hash($message), spl_object_hash($event->envelope->envelope->getMessage())))
+            ;
+        }
 
         $envelope = $this->messageBus->dispatch($message);
         $this->messageBus->rollback(new \Exception('Something goes wrong'));
@@ -81,6 +93,7 @@ final class TransactionalMessageBusRollbackTest extends TestCase
             'succeed_count' => 0,
             'failed_count' => 0,
             'expects_event_dispatcher' => 1,
+            'is_event_dispatcher_throws' => false,
         ];
 
         yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
@@ -89,6 +102,7 @@ final class TransactionalMessageBusRollbackTest extends TestCase
             'succeed_count' => 0,
             'failed_count' => 0,
             'expects_event_dispatcher' => 1,
+            'is_event_dispatcher_throws' => false,
         ];
 
         yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
@@ -97,6 +111,16 @@ final class TransactionalMessageBusRollbackTest extends TestCase
             'succeed_count' => 0,
             'failed_count' => 0,
             'expects_event_dispatcher' => 1,
+            'is_event_dispatcher_throws' => false,
+        ];
+
+        yield sprintf('%s event dispatcher throws', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+            'message' => new TransactionalOnHandledMessage(),
+            'pending_count' => 0,
+            'succeed_count' => 0,
+            'failed_count' => 0,
+            'expects_event_dispatcher' => 1,
+            'is_event_dispatcher_throws' => true,
         ];
     }
 }

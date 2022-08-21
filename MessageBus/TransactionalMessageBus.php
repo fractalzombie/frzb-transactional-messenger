@@ -55,8 +55,7 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
 
         TransactionHelper::isTransactional($message)
             ? $this->pendingStorage->append(new PendingEnvelope($envelope))
-            : $this->dispatchEnvelope($envelope)
-        ;
+            : $this->dispatchEnvelope($envelope);
 
         return $envelope;
     }
@@ -85,26 +84,20 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
             $this->dispatchFailedEnvelopes();
         } catch (\Throwable $e) {
             throw MessageBusException::fromThrowable($e);
+        } finally {
+            $this->pendingStorage->clear();
+            $this->succeedStorage->clear();
+            $this->failedStorage->clear();
         }
-
-        $this->pendingStorage->clear();
-        $this->succeedStorage->clear();
-        $this->failedStorage->clear();
     }
 
     private function dispatchPendingEnvelopes(CommitType ...$commitTypes): void
     {
-        $pendingEnvelopes = ArrayList::collect($this->pendingStorage->iterate());
-
-        $pendingEnvelopes
-            ->filter(static fn (PendingEnvelope $pe) => TransactionHelper::isDispatchable($pe->getMessageClass(), ...$commitTypes))
-            ->tap(fn (PendingEnvelope $pe) => $this->dispatchEnvelope($pe->envelope))
-        ;
-
-        $pendingEnvelopes
-            ->filter(static fn (PendingEnvelope $pe) => !TransactionHelper::isDispatchable($pe->getMessageClass(), ...$commitTypes))
-            ->tap(fn (PendingEnvelope $pe) => $this->pendingStorage->prepend($pe))
-        ;
+        ArrayList::collect($this->pendingStorage->iterate())->tap(
+            fn (PendingEnvelope $pe) => $pe->isTransactional(...$commitTypes)
+                ? $this->dispatchEnvelope($pe->envelope)
+                : $this->pendingStorage->prepend($pe),
+        );
     }
 
     private function dispatchSucceedEnvelopes(): void
@@ -121,17 +114,21 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
         ;
     }
 
-    private function dispatchEnvelope(Envelope $envelope): void
+    private function dispatchEnvelope(Envelope $envelope): Envelope
     {
         try {
             $this->succeedStorage->append(new SucceedEnvelope($this->decoratedBus->dispatch($envelope)));
         } catch (\Throwable $e) {
             $this->failedStorage->append(new FailedEnvelope($envelope, $e));
+        } finally {
+            return $envelope;
         }
     }
 
-    private function dispatchEvent(Event $event): void
+    private function dispatchEvent(Event $event): Event
     {
         $this->eventDispatcher->dispatch($event);
+
+        return $event;
     }
 }

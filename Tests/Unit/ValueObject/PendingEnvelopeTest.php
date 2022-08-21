@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FRZB\Component\TransactionalMessenger\Tests\Unit\ValueObject;
 
+use FRZB\Component\TransactionalMessenger\Enum\CommitType;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnHandledMessage;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnResponseMessage;
@@ -18,28 +19,33 @@ use PHPUnit\Framework\TestCase;
 class PendingEnvelopeTest extends TestCase
 {
     #[DataProvider('dataProvider')]
-    public function testConstructorMethod(object $message): void
+    public function testConstructorMethod(object $message, array $commitTypes): void
     {
         $envelope = EnvelopeHelper::wrap($message);
         $whenPended = new \DateTimeImmutable();
-        $failedEnvelope = new PendingEnvelope($envelope, $whenPended);
+        $pendingEnvelope = new PendingEnvelope($envelope, $whenPended);
 
-        self::assertSame($whenPended, $failedEnvelope->whenPended);
-        self::assertSame(spl_object_hash($message), spl_object_hash($failedEnvelope->envelope->getMessage()));
+        self::assertSame($whenPended, $pendingEnvelope->whenPended);
+        self::assertSame(spl_object_hash($message), spl_object_hash($pendingEnvelope->envelope->getMessage()));
+        self::assertSame($message::class, $pendingEnvelope->getMessageClass());
+        self::assertTrue($pendingEnvelope->isTransactional(...$commitTypes));
     }
 
     public function dataProvider(): iterable
     {
         yield 'TransactionalOnTerminateMessage with PendingEnvelope' => [
             'message' => new TransactionalOnTerminateMessage(),
+            'commitTypes' => [CommitType::OnTerminate],
         ];
 
         yield 'TransactionalOnResponseMessage with PendingEnvelope' => [
             'message' => new TransactionalOnResponseMessage(),
+            'commitTypes' => [CommitType::OnResponse],
         ];
 
         yield 'TransactionalOnHandledMessage with PendingEnvelope' => [
             'message' => new TransactionalOnHandledMessage(),
+            'commitTypes' => [CommitType::OnHandled],
         ];
     }
 }

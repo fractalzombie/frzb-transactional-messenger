@@ -22,10 +22,10 @@ class SucceedEnvelopeTest extends TestCase
     {
         $envelope = EnvelopeHelper::wrap($message);
         $whenDispatched = new \DateTimeImmutable();
-        $failedEnvelope = new SucceedEnvelope($envelope, $whenDispatched);
+        $succeedEnvelope = new SucceedEnvelope($envelope, $whenDispatched);
 
-        self::assertSame($whenDispatched, $failedEnvelope->whenDispatched);
-        self::assertSame(spl_object_hash($message), spl_object_hash($failedEnvelope->envelope->getMessage()));
+        self::assertSame($whenDispatched, $succeedEnvelope->whenDispatched);
+        self::assertSame(spl_object_hash($message), spl_object_hash($succeedEnvelope->envelope->getMessage()));
     }
 
     public function dataProvider(): iterable
