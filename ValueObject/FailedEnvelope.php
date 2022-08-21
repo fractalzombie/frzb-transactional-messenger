@@ -19,6 +19,6 @@ final class FailedEnvelope
         \Throwable $exception,
         public readonly \DateTimeImmutable $whenFailed = new \DateTimeImmutable(),
     ) {
-        $this->exception = DispatchException::fromThrowable($exception);
+        $this->exception = $exception instanceof DispatchException ? $exception : DispatchException::fromThrowable($exception);
     }
 }

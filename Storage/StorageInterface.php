@@ -33,6 +33,9 @@ interface StorageInterface
     /** @return null|T */
     public function next(): ?object;
 
+    /** @return \Iterator<T> */
+    public function iterate(): iterable;
+
     /**
      * @template R of object
      *

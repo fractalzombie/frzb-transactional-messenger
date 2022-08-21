@@ -48,6 +48,14 @@ class Storage implements StorageInterface
     }
 
     /** {@inheritdoc} */
+    public function iterate(): iterable
+    {
+        while ($item = $this->next()) {
+            yield $item;
+        }
+    }
+
+    /** {@inheritdoc} */
     public function map(callable $callback): static
     {
         return new static(array_map($callback, $this->items));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FRZB\Component\TransactionalMessenger\MessageBus;
 
+use Fp\Collections\ArrayList;
 use FRZB\Component\DependencyInjection\Attribute\AsDecorator;
 use FRZB\Component\DependencyInjection\Attribute\AsService;
 use FRZB\Component\TransactionalMessenger\Enum\CommitType;
@@ -75,11 +76,10 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
     /** {@inheritdoc} */
     public function rollback(\Throwable $exception): void
     {
-        $this->failedStorage->merge(
-            $this->pendingStorage->map(
-                static fn (PendingEnvelope $pe) => new FailedEnvelope($pe->envelope, $exception),
-            ),
-        );
+        ArrayList::collect($this->pendingStorage->iterate())
+            ->map(static fn (PendingEnvelope $pe) => new FailedEnvelope($pe->envelope, $exception))
+            ->tap(fn (FailedEnvelope $fe) => $this->failedStorage->append($fe))
+        ;
 
         try {
             $this->dispatchFailedEnvelopes();
@@ -94,30 +94,31 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
 
     private function dispatchPendingEnvelopes(CommitType ...$commitTypes): void
     {
-        $notAllowedForDispatchEnvelopes = new StorageImpl();
+        $pendingEnvelopes = ArrayList::collect($this->pendingStorage->iterate());
 
-        while ($pendingEnvelope = $this->pendingStorage->next()) {
-            TransactionHelper::isDispatchable($pendingEnvelope->getMessageClass(), ...$commitTypes)
-                ? $this->dispatchEnvelope($pendingEnvelope->envelope)
-                : $notAllowedForDispatchEnvelopes->prepend($pendingEnvelope)
-            ;
-        }
+        $pendingEnvelopes
+            ->filter(static fn (PendingEnvelope $pe) => TransactionHelper::isDispatchable($pe->getMessageClass(), ...$commitTypes))
+            ->tap(fn (PendingEnvelope $pe) => $this->dispatchEnvelope($pe->envelope))
+        ;
 
-        $this->pendingStorage->prepend(...$notAllowedForDispatchEnvelopes->list());
+        $pendingEnvelopes
+            ->filter(static fn (PendingEnvelope $pe) => !TransactionHelper::isDispatchable($pe->getMessageClass(), ...$commitTypes))
+            ->tap(fn (PendingEnvelope $pe) => $this->pendingStorage->prepend($pe))
+        ;
     }
 
     private function dispatchSucceedEnvelopes(): void
     {
-        while ($succeedEnvelope = $this->succeedStorage->next()) {
-            $this->dispatchEvent(new DispatchSucceedEvent($succeedEnvelope));
-        }
+        ArrayList::collect($this->succeedStorage->iterate())
+            ->tap(fn (SucceedEnvelope $se) => $this->dispatchEvent(new DispatchSucceedEvent($se)))
+        ;
     }
 
     private function dispatchFailedEnvelopes(): void
     {
-        while ($failedEnvelope = $this->failedStorage->next()) {
-            $this->dispatchEvent(new DispatchFailedEvent($failedEnvelope));
-        }
+        ArrayList::collect($this->failedStorage->iterate())
+            ->tap(fn (FailedEnvelope $fe) => $this->dispatchEvent(new DispatchFailedEvent($fe)))
+        ;
     }
 
     private function dispatchEnvelope(Envelope $envelope): void

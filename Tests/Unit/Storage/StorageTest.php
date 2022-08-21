@@ -53,6 +53,18 @@ final class StorageTest extends TestCase
         self::assertInstanceOf(MappedTestObject::class, $mappedStorage->next());
     }
 
+    public function testIterateMethod(): void
+    {
+        $items = [new TestObject(), new TestObject(), new TestObject()];
+        $storage = new StorageImpl($items);
+
+        foreach ($storage->iterate() as $index => $item) {
+            self::assertSame($items[$index]->getId(), $item->getId());
+        }
+
+        self::assertEmpty($storage->list());
+    }
+
     public function testFilterMethod(): void
     {
         $item = new TestObject();
