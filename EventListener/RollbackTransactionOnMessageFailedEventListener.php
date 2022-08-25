@@ -9,7 +9,7 @@ use FRZB\Component\TransactionalMessenger\MessageBus\RollbackTransactionInterfac
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 
-#[AsEventListener(WorkerMessageFailedEvent::class, 'onMessageFailed', Transactional::LISTENER_PRIORITY)]
+#[AsEventListener(WorkerMessageFailedEvent::class, priority: Transactional::LISTENER_PRIORITY)]
 class RollbackTransactionOnMessageFailedEventListener
 {
     public function __construct(
