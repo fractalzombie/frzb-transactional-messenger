@@ -28,7 +28,7 @@ class SucceedEnvelopeTest extends TestCase
         self::assertSame(spl_object_hash($message), spl_object_hash($succeedEnvelope->envelope->getMessage()));
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield 'TransactionalOnTerminateMessage with SucceedEnvelope' => [
             'message' => new TransactionalOnTerminateMessage(),

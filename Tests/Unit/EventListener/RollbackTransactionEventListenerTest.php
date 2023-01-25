@@ -41,7 +41,7 @@ final class RollbackTransactionEventListenerTest extends TestCase
         (new $eventListenerClass($this->rollbackService))($event);
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield ClassHelper::getShortName(RollbackTransactionOnExceptionEventListener::class) => [
             'event_listener' => RollbackTransactionOnExceptionEventListener::class,

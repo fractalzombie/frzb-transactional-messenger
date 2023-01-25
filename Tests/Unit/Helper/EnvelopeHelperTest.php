@@ -28,7 +28,7 @@ final class EnvelopeHelperTest extends TestCase
         self::assertNotNull($envelope->last(DispatchAfterCurrentBusStamp::class));
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'target' => new TransactionalOnTerminateMessage(),

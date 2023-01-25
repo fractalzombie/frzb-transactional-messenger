@@ -40,7 +40,7 @@ final class TransactionHelperTest extends TestCase
         self::assertSame($isAllowed, TransactionHelper::isDispatchable($className, ...$commitTypes));
     }
 
-    public function transactionalProvider(): iterable
+    public static function transactionalProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,

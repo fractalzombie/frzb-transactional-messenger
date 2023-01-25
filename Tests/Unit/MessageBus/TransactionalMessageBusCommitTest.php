@@ -107,7 +107,7 @@ final class TransactionalMessageBusCommitTest extends TestCase
         self::assertSame(spl_object_hash($envelope), spl_object_hash((new \ReflectionMethod($this->messageBus, 'dispatchEnvelope'))->invoke($this->messageBus, $envelope)));
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),

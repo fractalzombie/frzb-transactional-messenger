@@ -52,7 +52,7 @@ final class ClassHelperTest extends TestCase
         ;
     }
 
-    public function shortNameProvider(): iterable
+    public static function shortNameProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,
@@ -80,7 +80,7 @@ final class ClassHelperTest extends TestCase
         ];
     }
 
-    public function reflectionProvider(): iterable
+    public static function reflectionProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,
@@ -113,7 +113,7 @@ final class ClassHelperTest extends TestCase
         ];
     }
 
-    public function parentReflectionProvider(): iterable
+    public static function parentReflectionProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,
@@ -146,7 +146,7 @@ final class ClassHelperTest extends TestCase
         ];
     }
 
-    public function reflectionAttributesProvider(): iterable
+    public static function reflectionAttributesProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,

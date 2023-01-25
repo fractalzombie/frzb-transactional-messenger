@@ -50,7 +50,7 @@ final class AttributeHelperTest extends TestCase
         self::assertSame($hasAttributes, AttributeHelper::hasAttribute($className, Transactional::class));
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'class_name' => TransactionalOnTerminateMessage::class,

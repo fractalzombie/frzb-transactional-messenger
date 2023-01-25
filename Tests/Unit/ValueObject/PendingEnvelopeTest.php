@@ -31,7 +31,7 @@ class PendingEnvelopeTest extends TestCase
         self::assertTrue($pendingEnvelope->isTransactional(...$commitTypes));
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield 'TransactionalOnTerminateMessage with PendingEnvelope' => [
             'message' => new TransactionalOnTerminateMessage(),

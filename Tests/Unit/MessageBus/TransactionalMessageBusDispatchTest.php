@@ -59,7 +59,7 @@ final class TransactionalMessageBusDispatchTest extends TestCase
         self::assertSame($pendingCount, $this->pendingStorage->count());
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),

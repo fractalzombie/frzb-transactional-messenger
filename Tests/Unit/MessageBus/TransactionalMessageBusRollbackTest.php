@@ -85,7 +85,7 @@ final class TransactionalMessageBusRollbackTest extends TestCase
         self::assertSame($failedCount, $this->failedStorage->count());
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),

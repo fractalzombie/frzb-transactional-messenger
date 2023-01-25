@@ -35,7 +35,7 @@ final class CommitTransactionEventListenerTest extends TestCase
         (new $eventListenerClass($this->commitService))();
     }
 
-    public function dataProvider(): iterable
+    public static function dataProvider(): iterable
     {
         yield ClassHelper::getShortName(CommitTransactionOnTerminateEventListener::class) => [
             'event_listener' => CommitTransactionOnTerminateEventListener::class,
