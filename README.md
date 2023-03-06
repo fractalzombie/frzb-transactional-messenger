@@ -1,11 +1,22 @@
 Transactional Messenger Component
 =============================
 
-![Workflow Build Status](https://github.com/fractalzombie/frzb-transactional-messenger/actions/workflows/ci.yml/badge.svg?event=push)
+![Workflow Build Status](https://github.com/fractalzombie/frzb-transactional-messenger/actions/workflows/build.yml/badge.svg?event=push)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fractalzombie/frzb-transactional-messenger/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/fractalzombie/frzb-transactional-messenger/?branch=main)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/fractalzombie/frzb-transactional-messenger/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
 [![Build Status](https://scrutinizer-ci.com/g/fractalzombie/frzb-transactional-messenger/badges/build.png?b=main)](https://scrutinizer-ci.com/g/fractalzombie/frzb-transactional-messenger/build-status/main)
 [![Coverage Status](https://coveralls.io/repos/github/fractalzombie/frzb-transactional-messenger/badge.svg?branch=main)](https://coveralls.io/github/fractalzombie/frzb-transactional-messenger?branch=main)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=bugs)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=coverage)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=fractalzombie_frzb-transactional-messenger&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=fractalzombie_frzb-transactional-messenger)
 
 The `Transactional Messenger` component allows make messenger transactional
 
