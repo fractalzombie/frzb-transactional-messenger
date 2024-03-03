@@ -2,6 +2,17 @@
 
 declare(strict_types=1);
 
+/**
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *
+ * Copyright (c) 2024 Mykhailo Shtanko fractalzombie@gmail.com
+ *
+ * For the full copyright and license information, please view the LICENSE.MD
+ * file that was distributed with this source code.
+ */
+
 namespace FRZB\Component\TransactionalMessenger\Tests\Unit\Helper;
 
 use FRZB\Component\TransactionalMessenger\Attribute\Transactional;
@@ -52,27 +63,27 @@ final class AttributeHelperTest extends TestCase
 
     public static function dataProvider(): iterable
     {
-        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+        yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
             'class_name' => TransactionalOnTerminateMessage::class,
             'has_attributes' => true,
         ];
 
-        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+        yield ClassHelper::getShortName(TransactionalOnResponseMessage::class) => [
             'class_name' => TransactionalOnResponseMessage::class,
             'has_attributes' => true,
         ];
 
-        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+        yield ClassHelper::getShortName(TransactionalOnHandledMessage::class) => [
             'class_name' => TransactionalOnHandledMessage::class,
             'has_attributes' => true,
         ];
 
-        yield sprintf('%s', ClassHelper::getShortName(ExtendedTransactionalMessage::class)) => [
+        yield ClassHelper::getShortName(ExtendedTransactionalMessage::class) => [
             'class_name' => ExtendedTransactionalMessage::class,
             'has_attributes' => true,
         ];
 
-        yield sprintf('%s', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
+        yield ClassHelper::getShortName(NonTransactionalMessage::class) => [
             'class_name' => NonTransactionalMessage::class,
             'has_attributes' => false,
         ];

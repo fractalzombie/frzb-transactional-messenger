@@ -2,6 +2,17 @@
 
 declare(strict_types=1);
 
+/**
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *
+ * Copyright (c) 2024 Mykhailo Shtanko fractalzombie@gmail.com
+ *
+ * For the full copyright and license information, please view the LICENSE.MD
+ * file that was distributed with this source code.
+ */
+
 namespace FRZB\Component\TransactionalMessenger\Helper;
 
 use Fp\Collections\ArrayList;
@@ -13,26 +24,24 @@ use JetBrains\PhpStorm\Immutable;
 #[Immutable]
 final class TransactionHelper
 {
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
-    public static function isTransactional(string|object $target): bool
+    public static function isTransactional(object|string $target): bool
     {
         return AttributeHelper::hasAttribute($target, Transactional::class);
     }
 
-    public static function getTransactional(string|object $target): array
+    public static function getTransactional(object|string $target): array
     {
         return AttributeHelper::getAttributes($target, Transactional::class);
     }
 
-    public static function isDispatchable(string|object $target, CommitType ...$commitTypes): bool
+    public static function isDispatchable(object|string $target, CommitType ...$commitTypes): bool
     {
         return ArrayList::collect(self::getTransactional($target))
             ->map(static fn (Transactional $t) => $t->commitTypes)
-            ->reduce(array_merge(...))
-            ->toArrayList(static fn (array $cts) => ArrayList::collect($cts))
+            ->flatten()
+            ->toArrayList()
             ->every(static fn (CommitType $ct) => \in_array($ct, $commitTypes, true))
         ;
     }

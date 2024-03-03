@@ -2,6 +2,17 @@
 
 declare(strict_types=1);
 
+/**
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *
+ * Copyright (c) 2024 Mykhailo Shtanko fractalzombie@gmail.com
+ *
+ * For the full copyright and license information, please view the LICENSE.MD
+ * file that was distributed with this source code.
+ */
+
 namespace FRZB\Component\TransactionalMessenger\Helper;
 
 use Fp\Collections\ArrayList;
@@ -12,11 +23,9 @@ use JetBrains\PhpStorm\Immutable;
 #[Immutable]
 final class AttributeHelper
 {
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
-    public static function hasAttribute(string|object $target, string $attributeClass): bool
+    public static function hasAttribute(object|string $target, string $attributeClass): bool
     {
         return !empty(self::getReflectionAttributes($target, $attributeClass));
     }
@@ -28,7 +37,7 @@ final class AttributeHelper
      *
      * @return null|T
      */
-    public static function getAttribute(string|object $target, string $attributeClass): ?object
+    public static function getAttribute(object|string $target, string $attributeClass): ?object
     {
         return ArrayList::collect(self::getAttributes($target, $attributeClass))
             ->firstElement()
@@ -43,11 +52,11 @@ final class AttributeHelper
      *
      * @return array<T>
      */
-    public static function getAttributes(string|object $target, string $attributeClass): array
+    public static function getAttributes(object|string $target, string $attributeClass): array
     {
         return ArrayList::collect(self::getReflectionAttributes($target, $attributeClass))
             ->map(static fn (\ReflectionAttribute $a) => $a->newInstance())
-            ->toArray()
+            ->toList()
         ;
     }
 
@@ -58,7 +67,7 @@ final class AttributeHelper
      *
      * @return array<\ReflectionAttribute<T>>
      */
-    public static function getReflectionAttributes(string|object $target, string $attributeClass): array
+    public static function getReflectionAttributes(object|string $target, string $attributeClass): array
     {
         return Option::fromNullable(ClassHelper::getReflectionClass($target))
             ->map(

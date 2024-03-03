@@ -2,6 +2,17 @@
 
 declare(strict_types=1);
 
+/**
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *
+ * Copyright (c) 2024 Mykhailo Shtanko fractalzombie@gmail.com
+ *
+ * For the full copyright and license information, please view the LICENSE.MD
+ * file that was distributed with this source code.
+ */
+
 namespace FRZB\Component\TransactionalMessenger\Tests\Unit\Helper;
 
 use FRZB\Component\TransactionalMessenger\Helper\ClassHelper;
@@ -30,12 +41,12 @@ final class EnvelopeHelperTest extends TestCase
 
     public static function dataProvider(): iterable
     {
-        yield sprintf('%s', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+        yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
             'target' => new TransactionalOnTerminateMessage(),
             'has_attributes' => true,
         ];
 
-        yield sprintf('%s', ClassHelper::getShortName(Envelope::class)) => [
+        yield ClassHelper::getShortName(Envelope::class) => [
             'target' => Envelope::wrap(new TransactionalOnTerminateMessage()),
             'has_attributes' => false,
         ];

@@ -22,19 +22,19 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
-        "fp4php/functional": "^4.20|^6",
-        "symfony/http-kernel": "^5.4|^6|^7",
-        "symfony/framework-bundle": "^5.4|^6|^7",
-        "symfony/event-dispatcher": "^5.4|^6|^7",
-        "frzb/dependency-injection": "^1.8",
-        "symfony/yaml": "^5.4|^6|^7",
-        "symfony/messenger": "^5.4|^6|^7"
+        "php": ">=8.2",
+        "fp4php/functional": "^6.0",
+        "symfony/http-kernel": "^6|^7",
+        "symfony/framework-bundle": "^6|^7",
+        "symfony/event-dispatcher": "^6|^7",
+        "frzb/dependency-injection": "^2.1",
+        "symfony/yaml": "^6|^7",
+        "symfony/messenger": "^6|^7"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",
-        "phpunit/php-code-coverage": "^10.0",
-        "symfony/phpunit-bridge": "^5.4|^6|^7",
+        "phpunit/php-code-coverage": "^10.1",
+        "symfony/phpunit-bridge": "^6|^7",
         "friendsofphp/php-cs-fixer": "^3.41",
         "symfony/test-pack": "^1.0.10"
     },

@@ -2,6 +2,17 @@
 
 declare(strict_types=1);
 
+/**
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *
+ * Copyright (c) 2024 Mykhailo Shtanko fractalzombie@gmail.com
+ *
+ * For the full copyright and license information, please view the LICENSE.MD
+ * file that was distributed with this source code.
+ */
+
 namespace FRZB\Component\TransactionalMessenger\MessageBus;
 
 use Fp\Collections\ArrayList;
@@ -48,7 +59,6 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
         $this->failedStorage = $failedStorage ?? new StorageImpl();
     }
 
-    /** {@inheritdoc} */
     public function dispatch(object $message, array $stamps = []): Envelope
     {
         $envelope = EnvelopeHelper::wrap($message);
@@ -60,7 +70,6 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
         return $envelope;
     }
 
-    /** {@inheritdoc} */
     public function commit(CommitType ...$commitTypes): void
     {
         try {
@@ -72,7 +81,6 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
         }
     }
 
-    /** {@inheritdoc} */
     public function rollback(\Throwable $exception): void
     {
         ArrayList::collect($this->pendingStorage->iterate())
