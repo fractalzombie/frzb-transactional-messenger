@@ -25,7 +25,7 @@ final class DispatchException extends \LogicException
 
     public static function fromSignal(ConsoleSignalEvent $event): self
     {
-        $message = sprintf(self::MESSAGE_SIGNAL_CONSOLE_EVENT, $event->getCommand());
+        $message = sprintf(self::MESSAGE_SIGNAL_CONSOLE_EVENT, $event->getCommand()->getName());
 
         return new self($message, $event->getHandlingSignal());
     }
