@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace FRZB\Component\TransactionalMessenger\Helper;
 
 use Fp\Collections\ArrayList;
-use Fp\Functional\Option\Option;
 use JetBrains\PhpStorm\Immutable;
 
 /** @internal */
@@ -72,6 +71,7 @@ final class AttributeHelper
         return ArrayList::collect(ClassHelper::getInheritanceList($target))
             ->map(static fn (string $class) => new \ReflectionClass($class))
             ->map(static fn (\ReflectionClass $rClass) => ClassHelper::getReflectionAttributes($rClass, $attributeClass))
-            ->toMergedArray();
+            ->toMergedArray()
+        ;
     }
 }

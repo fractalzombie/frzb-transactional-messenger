@@ -28,7 +28,7 @@ The recommended way to install is through Composer:
 composer require frzb/transactional-messenger
 ```
 
-It requires PHP version 8.1 and higher.
+It requires PHP version 8.2 and higher.
 
 Usage `#[Transactional]`
 -----
