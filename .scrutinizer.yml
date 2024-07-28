@@ -1,4 +1,5 @@
 build:
+  image: default-bionic
   nodes:
     analysis:
       tests:
@@ -6,7 +7,7 @@ build:
           - php-scrutinizer-run
 
   environment:
-    php: 8.3
+    php: 8.3.1
 
 filter:
   excluded_paths:
