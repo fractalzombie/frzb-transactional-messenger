@@ -66,3 +66,8 @@ final class CreateUserMessage {
 Resources
 ---------
 * [License](https://github.com/fractalzombie/frzb-transactional-messenger/blob/main/LICENSE.md)
+
+Contributions
+---------
+
+![Alt](https://repobeats.axiom.co/api/embed/15b14d3e93a2c90b09ea6029f27f864f38ce0901.svg "Repobeats analytics image")

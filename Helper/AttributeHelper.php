@@ -69,13 +69,9 @@ final class AttributeHelper
      */
     public static function getReflectionAttributes(object|string $target, string $attributeClass): array
     {
-        return Option::fromNullable(ClassHelper::getReflectionClass($target))
-            ->map(
-                static fn (\ReflectionClass $rClass) => Option::fromNullable(ClassHelper::getParentReflectionClass($rClass))
-                    ->map(static fn (\ReflectionClass $rClass) => [...ClassHelper::getReflectionAttributes($rClass, $attributeClass), ...self::getReflectionAttributes($rClass, $attributeClass)])
-                    ->getOrElse(ClassHelper::getReflectionAttributes($rClass, $attributeClass))
-            )
-            ->getOrElse([])
-        ;
+        return ArrayList::collect(ClassHelper::getInheritanceList($target))
+            ->map(static fn (string $class) => new \ReflectionClass($class))
+            ->map(static fn (\ReflectionClass $rClass) => ClassHelper::getReflectionAttributes($rClass, $attributeClass))
+            ->toMergedArray();
     }
 }

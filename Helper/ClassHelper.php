@@ -30,6 +30,18 @@ final class ClassHelper
         return self::getReflectionClass($target)?->getShortName() ?? self::DEFAULT_SHORT_NAME;
     }
 
+    public static function getInheritanceList(object|string $target): array
+    {
+        $isTargetObject = is_object($target);
+        $targetClass = $isTargetObject ? $target::class : $target;
+
+        if (!class_exists($targetClass)) {
+            return [];
+        }
+
+        return [$targetClass, ...(class_parents($target, false) ?: [])];
+    }
+
     /**
      * @template T
      *
