@@ -20,13 +20,12 @@ use FRZB\Component\TransactionalMessenger\Helper\TransactionHelper;
 use JetBrains\PhpStorm\Immutable;
 use Symfony\Component\Messenger\Envelope;
 
-/** @template T of object */
 #[Immutable]
-final class PendingEnvelope
+final readonly class PendingEnvelope
 {
     public function __construct(
-        public readonly Envelope $envelope,
-        public readonly \DateTimeImmutable $whenPended = new \DateTimeImmutable(),
+        public Envelope $envelope,
+        public \DateTimeImmutable $whenPended = new \DateTimeImmutable(),
     ) {}
 
     public function getMessageClass(): string

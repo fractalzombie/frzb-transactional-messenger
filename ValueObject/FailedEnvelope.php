@@ -19,16 +19,15 @@ use FRZB\Component\TransactionalMessenger\Exception\DispatchException;
 use JetBrains\PhpStorm\Immutable;
 use Symfony\Component\Messenger\Envelope;
 
-/** @template T of object */
 #[Immutable]
-final class FailedEnvelope
+final readonly class FailedEnvelope
 {
-    public readonly DispatchException $exception;
+    public DispatchException $exception;
 
     public function __construct(
-        public readonly Envelope $envelope,
+        public Envelope $envelope,
         \Throwable $exception,
-        public readonly \DateTimeImmutable $whenFailed = new \DateTimeImmutable(),
+        public \DateTimeImmutable $whenFailed = new \DateTimeImmutable(),
     ) {
         $this->exception = $exception instanceof DispatchException ? $exception : DispatchException::fromThrowable($exception);
     }

@@ -32,22 +32,22 @@ final class ClassHelper
 
     public static function getInheritanceList(object|string $target): array
     {
-        $isTargetObject = is_object($target);
+        $isTargetObject = \is_object($target);
         $targetClass = $isTargetObject ? $target::class : $target;
 
         if (!class_exists($targetClass)) {
             return [];
         }
 
-        return [$targetClass, ...(class_parents($target, false) ?: [])];
+        return [$targetClass => $targetClass, ...(class_parents($target, false) ?: [])];
     }
 
     /**
-     * @template T
+     * @psalm-template TTarget
      *
-     * @param class-string<T>|T $target
+     * @psalm-param class-string<TTarget>|TTarget $target
      *
-     * @return null|\ReflectionClass<T>
+     * @psalm-return ?\ReflectionClass<TTarget>
      */
     public static function getReflectionClass(object|string $target): ?\ReflectionClass
     {
@@ -59,11 +59,11 @@ final class ClassHelper
     }
 
     /**
-     * @template T
+     * @psalm-template TTarget
      *
-     * @param class-string<T>|T $target
+     * @psalm-param class-string<TTarget>|TTarget $target
      *
-     * @return null|\ReflectionClass<T>
+     * @psalm-return ?\ReflectionClass<TTarget>
      */
     public static function getParentReflectionClass(object|string $target): ?\ReflectionClass
     {
@@ -71,11 +71,11 @@ final class ClassHelper
     }
 
     /**
-     * @template T
+     * @psalm-template TTarget
      *
-     * @param class-string<T> $attributeClass
+     * @psalm-param class-string<TTarget>|TTarget $target
      *
-     * @return \Iterator<\ReflectionAttribute<T>>
+     * @psalm-return \Iterator<\ReflectionAttribute<TTarget>>
      */
     public static function getReflectionAttributes(object|string $target, string $attributeClass): iterable
     {

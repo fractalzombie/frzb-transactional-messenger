@@ -16,14 +16,14 @@ declare(strict_types=1);
 namespace FRZB\Component\TransactionalMessenger\Storage;
 
 /**
- * @template T
+ * @psalm-template TValue
  *
- * @extends StorageInterface<T>
+ * @template-implements StorageInterface<TValue>
  */
 class Storage implements StorageInterface
 {
     public function __construct(
-        /** @param \Iterator<T> $items */
+        /** @param \Iterator<TValue> $items */
         private iterable $items = [],
     ) {}
 
@@ -72,7 +72,7 @@ class Storage implements StorageInterface
 
     public function merge(iterable|StorageInterface $storage): static
     {
-        $this->items = [...$this->items, ...$storage instanceof StorageInterface ? $storage->list() : $storage];
+        $this->items = [...$this->items, ...($storage instanceof StorageInterface ? $storage->list() : $storage)];
 
         return $this;
     }

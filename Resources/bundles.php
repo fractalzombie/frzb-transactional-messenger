@@ -12,12 +12,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE.MD
  * file that was distributed with this source code.
  */
-use FRZB\Component\DependencyInjection\DependencyInjectionBundle;
-use FRZB\Component\TransactionalMessenger\MessageBus\TransactionalMessageBus;
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 
 return [
-    FrameworkBundle::class => ['all' => true],
-    DependencyInjectionBundle::class => ['all' => true],
-    TransactionalMessageBus::class => ['all' => true],
+    Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
+    FRZB\Component\DependencyInjection\DependencyInjectionBundle::class => ['all' => true],
+    FRZB\Component\TransactionalMessenger\MessageBus\TransactionalMessageBus::class => ['all' => true],
 ];

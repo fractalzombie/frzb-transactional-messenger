@@ -16,64 +16,64 @@ declare(strict_types=1);
 namespace FRZB\Component\TransactionalMessenger\Storage;
 
 /**
- * @template T of object
+ * @psalm-template TValue of object
  */
 interface StorageInterface
 {
     /**
-     * @param \Iterator<T>|self<T> $storage
+     * @psalm-param \Iterator<TValue>|self<TValue> $storage
      *
-     * @return static<T>
+     * @psalm-return static<TValue>
      */
     public function init(iterable|self $storage): static;
 
     /**
-     * @param T ...$items
+     * @psalm-param TValue ...$items
      *
-     * @return static<T>
+     * @psalm-return static<TValue>
      */
     public function append(object ...$items): static;
 
     /**
-     * @param T ...$items
+     * @psalm-param TValue ...$items
      *
-     * @return static<T>
+     * @psalm-return static<TValue>
      */
     public function prepend(object ...$items): static;
 
-    /** @return null|T */
+    /** @psalm-return ?TValue */
     public function next(): ?object;
 
-    /** @return \Iterator<T> */
+    /** @psalm-return \Iterator<TValue> */
     public function iterate(): iterable;
 
     /**
-     * @template R of object
+     * @psalm-template RType of object
      *
-     * @param callable<T> $callback
+     * @psalm-param callable<TValue> $callback
      *
-     * @return static<R>
+     * @psalm-return static<RType>
      */
     public function map(callable $callback): static;
 
     /**
-     * @param callable<T> $callback
+     * @psalm-param callable<TValue> $callback
      *
-     * @return static<T>
+     * @psalm-return static<TValue>
      */
     public function filter(callable $callback): static;
 
     /**
-     * @param \Iterator<T>|self<T> $storage
+     * @psalm-param \Iterator<TValue>|self<TValue> $storage
      *
-     * @return static<T>
+     * @psalm-return static<TValue>
      */
     public function merge(iterable|self $storage): static;
 
     /** Clear envelope storage */
     public function clear(): static;
 
-    /** @return \Iterator<T> */
+    /** @psalm-return \Iterator<TValue> */
     public function list(): iterable;
 
     /** Count of envelopes in storage */

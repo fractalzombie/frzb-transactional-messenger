@@ -30,13 +30,13 @@ final class AttributeHelper
     }
 
     /**
-     * @template T
+     * @psalm-template TAttribute
      *
-     * @param class-string<T> $attributeClass
+     * @psalm-param class-string<TAttribute> $attributeClass
      *
-     * @return null|T
+     * @psalm-return ?TAttribute
      */
-    public static function getAttribute(object|string $target, string $attributeClass): ?object
+    public static function getAttribute(object|string $target, string|object $attributeClass): ?object
     {
         return ArrayList::collect(self::getAttributes($target, $attributeClass))
             ->firstElement()
@@ -45,11 +45,11 @@ final class AttributeHelper
     }
 
     /**
-     * @template T
+     * @psalm-template TAttribute
      *
-     * @param class-string<T> $attributeClass
+     * @psalm-param class-string<TAttribute> $attributeClass
      *
-     * @return array<T>
+     * @psalm-return TAttribute[]
      */
     public static function getAttributes(object|string $target, string $attributeClass): array
     {
@@ -60,11 +60,11 @@ final class AttributeHelper
     }
 
     /**
-     * @template T
+     * @psalm-template TAttribute
      *
-     * @param class-string<T> $attributeClass
+     * @psalm-param class-string<TAttribute> $attributeClass
      *
-     * @return array<\ReflectionAttribute<T>>
+     * @psalm-return \ReflectionAttribute<TAttribute>[]
      */
     public static function getReflectionAttributes(object|string $target, string $attributeClass): array
     {
