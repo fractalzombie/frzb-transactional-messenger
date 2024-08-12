@@ -19,7 +19,7 @@ use FRZB\Component\TransactionalMessenger\EventListener\RollbackTransactionOnExc
 use FRZB\Component\TransactionalMessenger\EventListener\RollbackTransactionOnMessageFailedEventListener;
 use FRZB\Component\TransactionalMessenger\Helper\ClassHelper;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
-use FRZB\Component\TransactionalMessenger\MessageBus\RollbackTransactionInterface as RollbackService;
+use FRZB\Component\TransactionalMessenger\MessageBus\RollbackTransactionInterface;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Kernel;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnTerminateMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -34,11 +34,11 @@ use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 #[Group('transactional-messenger')]
 final class RollbackTransactionEventListenerTest extends TestCase
 {
-    private RollbackService $rollbackService;
+    private RollbackTransactionInterface $rollbackService;
 
     protected function setUp(): void
     {
-        $this->rollbackService = $this->createMock(RollbackService::class);
+        $this->rollbackService = $this->createMock(RollbackTransactionInterface::class);
     }
 
     #[DataProvider('dataProvider')]
@@ -55,12 +55,12 @@ final class RollbackTransactionEventListenerTest extends TestCase
     public static function dataProvider(): iterable
     {
         yield ClassHelper::getShortName(RollbackTransactionOnExceptionEventListener::class) => [
-            'event_listener' => RollbackTransactionOnExceptionEventListener::class,
+            'eventListenerClass' => RollbackTransactionOnExceptionEventListener::class,
             'event' => new ExceptionEvent(new Kernel('test', false), Request::createFromGlobals(), HttpKernelInterface::MAIN_REQUEST, new \Exception('Something goes wrong')),
         ];
 
         yield ClassHelper::getShortName(RollbackTransactionOnMessageFailedEventListener::class) => [
-            'event_listener' => RollbackTransactionOnMessageFailedEventListener::class,
+            'eventListenerClass' => RollbackTransactionOnMessageFailedEventListener::class,
             'event' => new WorkerMessageFailedEvent(EnvelopeHelper::wrap(new TransactionalOnTerminateMessage()), 'default.receiver', new \Exception('Something goes wrong')),
         ];
     }

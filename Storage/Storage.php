@@ -18,7 +18,7 @@ namespace FRZB\Component\TransactionalMessenger\Storage;
 /**
  * @psalm-template TValue
  *
- * @template-implements StorageInterface<TValue>
+ * @psalm-extends StorageInterface<TValue>
  */
 class Storage implements StorageInterface
 {

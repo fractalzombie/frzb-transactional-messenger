@@ -72,25 +72,25 @@ final class TransactionalMessageBusDispatchTest extends TestCase
 
     public static function dataProvider(): iterable
     {
-        yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+        yield \sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),
-            'pending_count' => 1,
-            'expects_decorated_dispatcher' => 0,
-            'expects_event_dispatcher' => 0,
+            'pendingCount' => 1,
+            'expectsDecoratedDispatcher' => 0,
+            'expectsEventDispatcher' => 0,
         ];
 
-        yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+        yield \sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
             'message' => new TransactionalOnResponseMessage(),
-            'pending_count' => 1,
-            'expects_decorated_dispatcher' => 0,
-            'expects_event_dispatcher' => 0,
+            'pendingCount' => 1,
+            'expectsDecoratedDispatcher' => 0,
+            'expectsEventDispatcher' => 0,
         ];
 
-        yield sprintf('%s is dispatched immediately', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
+        yield \sprintf('%s is dispatched immediately', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
             'message' => new NonTransactionalMessage(),
-            'pending_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 0,
+            'pendingCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 0,
         ];
     }
 }

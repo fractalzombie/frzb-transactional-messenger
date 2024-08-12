@@ -16,47 +16,47 @@ declare(strict_types=1);
 namespace FRZB\Component\TransactionalMessenger\MessageBus;
 
 use Fp\Collections\ArrayList;
-use FRZB\Component\DependencyInjection\Attribute\AsDecorator;
-use FRZB\Component\DependencyInjection\Attribute\AsService;
 use FRZB\Component\TransactionalMessenger\Enum\CommitType;
 use FRZB\Component\TransactionalMessenger\Event\DispatchFailedEvent;
 use FRZB\Component\TransactionalMessenger\Event\DispatchSucceedEvent;
 use FRZB\Component\TransactionalMessenger\Exception\MessageBusException;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
 use FRZB\Component\TransactionalMessenger\Helper\TransactionHelper;
-use FRZB\Component\TransactionalMessenger\Storage\Storage as StorageImpl;
-use FRZB\Component\TransactionalMessenger\Storage\StorageInterface as Storage;
+use FRZB\Component\TransactionalMessenger\Storage\Storage;
+use FRZB\Component\TransactionalMessenger\Storage\StorageInterface;
 use FRZB\Component\TransactionalMessenger\ValueObject\FailedEnvelope;
 use FRZB\Component\TransactionalMessenger\ValueObject\PendingEnvelope;
 use FRZB\Component\TransactionalMessenger\ValueObject\SucceedEnvelope;
-use Psr\EventDispatcher\EventDispatcherInterface as EventDispatcher;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
-#[AsService]
-#[AsDecorator(MessageBus::class)]
+#[Autoconfigure]
+#[AsDecorator(MessageBusInterface::class)]
 final class TransactionalMessageBus implements TransactionalMessageBusInterface
 {
-    /** @var Storage<PendingEnvelope> */
-    private readonly Storage $pendingStorage;
+    /** @var StorageInterface<PendingEnvelope> */
+    private readonly StorageInterface $pendingStorage;
 
-    /** @var Storage<SucceedEnvelope> */
-    private readonly Storage $succeedStorage;
+    /** @var StorageInterface<SucceedEnvelope> */
+    private readonly StorageInterface $succeedStorage;
 
-    /** @var Storage<FailedEnvelope> */
-    private readonly Storage $failedStorage;
+    /** @var StorageInterface<FailedEnvelope> */
+    private readonly StorageInterface $failedStorage;
 
     public function __construct(
-        private readonly MessageBus $decoratedBus,
-        private readonly EventDispatcher $eventDispatcher,
+        private readonly MessageBusInterface $decoratedBus,
+        private readonly EventDispatcherInterface $eventDispatcher,
         ?Storage $pendingStorage = null,
         ?Storage $succeedStorage = null,
         ?Storage $failedStorage = null,
     ) {
-        $this->pendingStorage = $pendingStorage ?? new StorageImpl();
-        $this->succeedStorage = $succeedStorage ?? new StorageImpl();
-        $this->failedStorage = $failedStorage ?? new StorageImpl();
+        $this->pendingStorage = $pendingStorage ?? new Storage();
+        $this->succeedStorage = $succeedStorage ?? new Storage();
+        $this->failedStorage = $failedStorage ?? new Storage();
     }
 
     public function dispatch(object $message, array $stamps = []): Envelope
@@ -102,23 +102,23 @@ final class TransactionalMessageBus implements TransactionalMessageBusInterface
     private function dispatchPendingEnvelopes(CommitType ...$commitTypes): void
     {
         ArrayList::collect($this->pendingStorage->iterate())->tap(
-            fn (PendingEnvelope $pe) => $pe->isTransactional(...$commitTypes)
-                ? $this->dispatchEnvelope($pe->envelope)
-                : $this->pendingStorage->prepend($pe),
+            fn (PendingEnvelope $envelope) => $envelope->isTransactional(...$commitTypes)
+                ? $this->dispatchEnvelope($envelope->envelope)
+                : $this->pendingStorage->prepend($envelope),
         );
     }
 
     private function dispatchSucceedEnvelopes(): void
     {
         ArrayList::collect($this->succeedStorage->iterate())
-            ->tap(fn (SucceedEnvelope $se) => $this->dispatchEvent(new DispatchSucceedEvent($se)))
+            ->tap(fn (SucceedEnvelope $envelope) => $this->dispatchEvent(new DispatchSucceedEvent($envelope)))
         ;
     }
 
     private function dispatchFailedEnvelopes(): void
     {
         ArrayList::collect($this->failedStorage->iterate())
-            ->tap(fn (FailedEnvelope $fe) => $this->dispatchEvent(new DispatchFailedEvent($fe)))
+            ->tap(fn (FailedEnvelope $envelope) => $this->dispatchEvent(new DispatchFailedEvent($envelope)))
         ;
     }
 

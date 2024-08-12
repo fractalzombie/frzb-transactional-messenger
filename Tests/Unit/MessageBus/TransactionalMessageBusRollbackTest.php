@@ -19,41 +19,41 @@ use FRZB\Component\TransactionalMessenger\Event\DispatchFailedEvent;
 use FRZB\Component\TransactionalMessenger\Exception\MessageBusException;
 use FRZB\Component\TransactionalMessenger\Helper\ClassHelper;
 use FRZB\Component\TransactionalMessenger\Helper\EnvelopeHelper;
-use FRZB\Component\TransactionalMessenger\MessageBus\TransactionalMessageBus as TransactionalMessageBusImpl;
-use FRZB\Component\TransactionalMessenger\MessageBus\TransactionalMessageBusInterface as TransactionalMessageBus;
-use FRZB\Component\TransactionalMessenger\Storage\Storage as StorageImpl;
-use FRZB\Component\TransactionalMessenger\Storage\StorageInterface as Storage;
+use FRZB\Component\TransactionalMessenger\MessageBus\TransactionalMessageBus;
+use FRZB\Component\TransactionalMessenger\MessageBus\TransactionalMessageBusInterface;
+use FRZB\Component\TransactionalMessenger\Storage\Storage;
+use FRZB\Component\TransactionalMessenger\Storage\StorageInterface;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnHandledMessage;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnResponseMessage;
 use FRZB\Component\TransactionalMessenger\Tests\Stub\Message\TransactionalOnTerminateMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Psr\EventDispatcher\EventDispatcherInterface as EventDispatcher;
-use Symfony\Component\Messenger\MessageBusInterface as MessageBus;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /** @internal */
 #[Group('transactional-messenger')]
 final class TransactionalMessageBusRollbackTest extends TestCase
 {
-    private Storage $pendingStorage;
-    private Storage $succeedStorage;
-    private Storage $failedStorage;
+    private StorageInterface $pendingStorage;
+    private StorageInterface $succeedStorage;
+    private StorageInterface $failedStorage;
 
-    private MessageBus $decoratedBus;
-    private EventDispatcher $eventDispatcher;
-    private TransactionalMessageBus $messageBus;
+    private MessageBusInterface $decoratedBus;
+    private EventDispatcherInterface $eventDispatcher;
+    private TransactionalMessageBusInterface $messageBus;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->pendingStorage = new StorageImpl();
-        $this->succeedStorage = new StorageImpl();
-        $this->failedStorage = new StorageImpl();
+        $this->pendingStorage = new Storage();
+        $this->succeedStorage = new Storage();
+        $this->failedStorage = new Storage();
 
-        $this->decoratedBus = $this->createMock(MessageBus::class);
-        $this->eventDispatcher = $this->createMock(EventDispatcher::class);
-        $this->messageBus = new TransactionalMessageBusImpl($this->decoratedBus, $this->eventDispatcher, $this->pendingStorage, $this->succeedStorage, $this->failedStorage);
+        $this->decoratedBus = $this->createMock(MessageBusInterface::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->messageBus = new TransactionalMessageBus($this->decoratedBus, $this->eventDispatcher, $this->pendingStorage, $this->succeedStorage, $this->failedStorage);
     }
 
     #[DataProvider('dataProvider')]
@@ -98,40 +98,40 @@ final class TransactionalMessageBusRollbackTest extends TestCase
 
     public static function dataProvider(): iterable
     {
-        yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+        yield \sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_event_dispatcher' => 1,
-            'is_event_dispatcher_throws' => false,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsEventDispatcher' => 1,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+        yield \sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
             'message' => new TransactionalOnResponseMessage(),
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_event_dispatcher' => 1,
-            'is_event_dispatcher_throws' => false,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsEventDispatcher' => 1,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+        yield \sprintf('%s is dispatched delayed', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
             'message' => new TransactionalOnHandledMessage(),
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_event_dispatcher' => 1,
-            'is_event_dispatcher_throws' => false,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsEventDispatcher' => 1,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s event dispatcher throws', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+        yield \sprintf('%s event dispatcher throws', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
             'message' => new TransactionalOnHandledMessage(),
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_event_dispatcher' => 1,
-            'is_event_dispatcher_throws' => true,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsEventDispatcher' => 1,
+            'isEventDispatcherThrows' => true,
         ];
     }
 }

@@ -29,7 +29,6 @@ class BundlesTest extends TestCase
         $bundles = require __DIR__.'/../../../Resources/bundles.php';
         $expectedBundles = [
             FrameworkBundle::class => ['all' => true],
-            DependencyInjectionBundle::class => ['all' => true],
             TransactionalMessageBus::class => ['all' => true],
         ];
 

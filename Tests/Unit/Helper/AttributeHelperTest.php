@@ -64,33 +64,33 @@ final class AttributeHelperTest extends TestCase
     public static function dataProvider(): iterable
     {
         yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'has_attributes' => true,
+            'className' => TransactionalOnTerminateMessage::class,
+            'hasAttributes' => true,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnResponseMessage::class) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'has_attributes' => true,
+            'className' => TransactionalOnResponseMessage::class,
+            'hasAttributes' => true,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnHandledMessage::class) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'has_attributes' => true,
+            'className' => TransactionalOnHandledMessage::class,
+            'hasAttributes' => true,
         ];
 
         yield ClassHelper::getShortName(ExtendedTransactionalMessage::class) => [
-            'class_name' => ExtendedTransactionalMessage::class,
-            'has_attributes' => true,
+            'className' => ExtendedTransactionalMessage::class,
+            'hasAttributes' => true,
         ];
 
         yield ClassHelper::getShortName(NonTransactionalMessage::class) => [
-            'class_name' => NonTransactionalMessage::class,
-            'has_attributes' => false,
+            'className' => NonTransactionalMessage::class,
+            'hasAttributes' => false,
         ];
 
         yield 'InvalidClassName' => [
-            'class_name' => 'InvalidClassName',
-            'has_attributes' => false,
+            'className' => 'InvalidClassName',
+            'hasAttributes' => false,
         ];
     }
 }

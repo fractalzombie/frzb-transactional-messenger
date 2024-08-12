@@ -22,7 +22,7 @@ final class Transactional
 {
     public const LISTENER_PRIORITY = -2048;
 
-    /** @var array<CommitType> */
+    /** @var CommitType[] */
     public readonly array $commitTypes;
 
     public function __construct(

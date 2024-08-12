@@ -53,91 +53,91 @@ final class TransactionHelperTest extends TestCase
     public static function transactionalProvider(): iterable
     {
         yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'is_transactional' => true,
+            'className' => TransactionalOnTerminateMessage::class,
+            'isTransactional' => true,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnResponseMessage::class) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'is_transactional' => true,
+            'className' => TransactionalOnResponseMessage::class,
+            'isTransactional' => true,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnHandledMessage::class) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'is_transactional' => true,
+            'className' => TransactionalOnHandledMessage::class,
+            'isTransactional' => true,
         ];
 
         yield ClassHelper::getShortName(NonTransactionalMessage::class) => [
-            'class_name' => NonTransactionalMessage::class,
-            'is_transactional' => false,
+            'className' => NonTransactionalMessage::class,
+            'isTransactional' => false,
         ];
 
         yield 'InvalidClassName' => [
-            'class_name' => 'InvalidClassName',
-            'is_transactional' => false,
+            'className' => 'InvalidClassName',
+            'isTransactional' => false,
         ];
     }
 
     public function dispatchableProvider(): iterable
     {
-        yield sprintf('%s is allowed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'is_allowed' => true,
-            'commit_types' => [
+        yield \sprintf('%s is allowed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+            'className' => TransactionalOnTerminateMessage::class,
+            'isAllowed' => true,
+            'commitTypes' => [
                 CommitType::OnTerminate,
             ],
         ];
 
-        yield sprintf('%s is allowed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'is_allowed' => true,
-            'commit_types' => [
+        yield \sprintf('%s is allowed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+            'className' => TransactionalOnResponseMessage::class,
+            'isAllowed' => true,
+            'commitTypes' => [
                 CommitType::OnResponse,
             ],
         ];
 
-        yield sprintf('%s is allowed', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'is_allowed' => true,
-            'commit_types' => [
+        yield \sprintf('%s is allowed', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+            'className' => TransactionalOnHandledMessage::class,
+            'isAllowed' => true,
+            'commitTypes' => [
                 CommitType::OnHandled,
             ],
         ];
 
-        yield sprintf('%s is not allowed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'is_allowed' => false,
-            'commit_types' => [
+        yield \sprintf('%s is not allowed', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+            'className' => TransactionalOnTerminateMessage::class,
+            'isAllowed' => false,
+            'commitTypes' => [
                 CommitType::OnResponse,
             ],
         ];
 
-        yield sprintf('%s is not allowed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'is_allowed' => false,
-            'commit_types' => [
+        yield \sprintf('%s is not allowed', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+            'className' => TransactionalOnResponseMessage::class,
+            'isAllowed' => false,
+            'commitTypes' => [
                 CommitType::OnTerminate,
             ],
         ];
 
-        yield sprintf('%s is not allowed', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'is_allowed' => false,
-            'commit_types' => [
+        yield \sprintf('%s is not allowed', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+            'className' => TransactionalOnHandledMessage::class,
+            'isAllowed' => false,
+            'commitTypes' => [
                 CommitType::OnTerminate,
             ],
         ];
 
-        yield sprintf('%s is not allowed', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
-            'class_name' => NonTransactionalMessage::class,
-            'is_allowed' => false,
-            'commit_types' => [],
+        yield \sprintf('%s is not allowed', ClassHelper::getShortName(NonTransactionalMessage::class)) => [
+            'className' => NonTransactionalMessage::class,
+            'isAllowed' => false,
+            'commitTypes' => [],
         ];
 
         yield 'InvalidClassName is not allowed' => [
-            'class_name' => 'InvalidClassName',
-            'is_allowed' => false,
-            'commit_types' => [],
+            'className' => 'InvalidClassName',
+            'isAllowed' => false,
+            'commitTypes' => [],
         ];
     }
 }

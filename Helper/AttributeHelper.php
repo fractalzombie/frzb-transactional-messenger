@@ -36,7 +36,7 @@ final class AttributeHelper
      *
      * @psalm-return ?TAttribute
      */
-    public static function getAttribute(object|string $target, string|object $attributeClass): ?object
+    public static function getAttribute(object|string $target, object|string $attributeClass): ?object
     {
         return ArrayList::collect(self::getAttributes($target, $attributeClass))
             ->firstElement()

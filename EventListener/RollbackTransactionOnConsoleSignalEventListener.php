@@ -17,7 +17,7 @@ namespace FRZB\Component\TransactionalMessenger\EventListener;
 
 use FRZB\Component\TransactionalMessenger\Attribute\Transactional;
 use FRZB\Component\TransactionalMessenger\Exception\DispatchException;
-use FRZB\Component\TransactionalMessenger\MessageBus\RollbackTransactionInterface as RollbackService;
+use FRZB\Component\TransactionalMessenger\MessageBus\RollbackTransactionInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleSignalEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -26,7 +26,7 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 class RollbackTransactionOnConsoleSignalEventListener
 {
     public function __construct(
-        private readonly RollbackService $service,
+        private readonly RollbackTransactionInterface $service,
     ) {}
 
     public function __invoke(ConsoleSignalEvent $event): void

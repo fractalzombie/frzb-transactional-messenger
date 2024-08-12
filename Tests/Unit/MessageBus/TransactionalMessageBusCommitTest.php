@@ -120,100 +120,100 @@ final class TransactionalMessageBusCommitTest extends TestCase
 
     public static function dataProvider(): iterable
     {
-        yield sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+        yield \sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),
-            'event_class' => DispatchSucceedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => false,
-            'is_event_dispatcher_throws' => false,
+            'eventClass' => DispatchSucceedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => false,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+        yield \sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
             'message' => new TransactionalOnResponseMessage(),
-            'event_class' => DispatchSucceedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => false,
-            'is_event_dispatcher_throws' => false,
+            'eventClass' => DispatchSucceedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => false,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+        yield \sprintf('%s is succeed commit', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
             'message' => new TransactionalOnHandledMessage(),
-            'event_class' => DispatchSucceedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => false,
-            'is_event_dispatcher_throws' => false,
+            'eventClass' => DispatchSucceedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => false,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+        yield \sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),
-            'event_class' => DispatchFailedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => true,
-            'is_event_dispatcher_throws' => false,
+            'eventClass' => DispatchFailedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => true,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
+        yield \sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnResponseMessage::class)) => [
             'message' => new TransactionalOnResponseMessage(),
-            'event_class' => DispatchFailedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => true,
-            'is_event_dispatcher_throws' => false,
+            'eventClass' => DispatchFailedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => true,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+        yield \sprintf('%s is failure commit', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
             'message' => new TransactionalOnHandledMessage(),
-            'event_class' => DispatchFailedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => true,
-            'is_event_dispatcher_throws' => false,
+            'eventClass' => DispatchFailedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => true,
+            'isEventDispatcherThrows' => false,
         ];
 
-        yield sprintf('%s is failure commit when event dispatcher throws', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
+        yield \sprintf('%s is failure commit when event dispatcher throws', ClassHelper::getShortName(TransactionalOnTerminateMessage::class)) => [
             'message' => new TransactionalOnTerminateMessage(),
-            'event_class' => DispatchSucceedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => false,
-            'is_event_dispatcher_throws' => true,
+            'eventClass' => DispatchSucceedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => false,
+            'isEventDispatcherThrows' => true,
         ];
 
-        yield sprintf('%s is failure commit when event dispatcher throws', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
+        yield \sprintf('%s is failure commit when event dispatcher throws', ClassHelper::getShortName(TransactionalOnHandledMessage::class)) => [
             'message' => new TransactionalOnHandledMessage(),
-            'event_class' => DispatchFailedEvent::class,
-            'pending_count' => 0,
-            'succeed_count' => 0,
-            'failed_count' => 0,
-            'expects_decorated_dispatcher' => 1,
-            'expects_event_dispatcher' => 1,
-            'is_decorated_bus_throws' => true,
-            'is_event_dispatcher_throws' => true,
+            'eventClass' => DispatchFailedEvent::class,
+            'pendingCount' => 0,
+            'succeedCount' => 0,
+            'failedCount' => 0,
+            'expectsDecoratedDispatcher' => 1,
+            'expectsEventDispatcher' => 1,
+            'isDecoratedBusThrows' => true,
+            'isEventDispatcherThrows' => true,
         ];
     }
 }

@@ -17,7 +17,7 @@ namespace FRZB\Component\TransactionalMessenger\EventListener;
 
 use FRZB\Component\TransactionalMessenger\Attribute\Transactional;
 use FRZB\Component\TransactionalMessenger\Enum\CommitType;
-use FRZB\Component\TransactionalMessenger\MessageBus\CommitTransactionInterface as CommitService;
+use FRZB\Component\TransactionalMessenger\MessageBus\CommitTransactionInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class CommitTransactionOnTerminateEventListener
 {
     public function __construct(
-        private readonly CommitService $service,
+        private readonly CommitTransactionInterface $service,
     ) {}
 
     public function __invoke(): void

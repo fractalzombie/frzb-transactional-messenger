@@ -19,7 +19,7 @@ use FRZB\Component\TransactionalMessenger\EventListener\CommitTransactionOnMessa
 use FRZB\Component\TransactionalMessenger\EventListener\CommitTransactionOnResponseEventListener;
 use FRZB\Component\TransactionalMessenger\EventListener\CommitTransactionOnTerminateEventListener;
 use FRZB\Component\TransactionalMessenger\Helper\ClassHelper;
-use FRZB\Component\TransactionalMessenger\MessageBus\CommitTransactionInterface as CommitService;
+use FRZB\Component\TransactionalMessenger\MessageBus\CommitTransactionInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -28,11 +28,11 @@ use PHPUnit\Framework\TestCase;
 #[Group('transactional-messenger')]
 final class CommitTransactionEventListenerTest extends TestCase
 {
-    private CommitService $commitService;
+    private CommitTransactionInterface $commitService;
 
     protected function setUp(): void
     {
-        $this->commitService = $this->createMock(CommitService::class);
+        $this->commitService = $this->createMock(CommitTransactionInterface::class);
     }
 
     #[DataProvider('dataProvider')]
@@ -49,15 +49,15 @@ final class CommitTransactionEventListenerTest extends TestCase
     public static function dataProvider(): iterable
     {
         yield ClassHelper::getShortName(CommitTransactionOnTerminateEventListener::class) => [
-            'event_listener' => CommitTransactionOnTerminateEventListener::class,
+            'eventListenerClass' => CommitTransactionOnTerminateEventListener::class,
         ];
 
         yield ClassHelper::getShortName(CommitTransactionOnResponseEventListener::class) => [
-            'event_listener' => CommitTransactionOnResponseEventListener::class,
+            'eventListenerClass' => CommitTransactionOnResponseEventListener::class,
         ];
 
         yield ClassHelper::getShortName(CommitTransactionOnMessageHandledEventListener::class) => [
-            'event_listener' => CommitTransactionOnMessageHandledEventListener::class,
+            'eventListenerClass' => CommitTransactionOnMessageHandledEventListener::class,
         ];
     }
 }

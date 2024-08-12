@@ -31,6 +31,7 @@ $finder = Finder::create()
         '.github',
         '.docker',
         'Documentation',
+        'Resources',
     ])
     ->notName('*Configuration.*')
     ->ignoreDotFiles(true)

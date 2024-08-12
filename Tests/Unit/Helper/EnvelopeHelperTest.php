@@ -29,7 +29,7 @@ use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
 final class EnvelopeHelperTest extends TestCase
 {
     #[DataProvider('dataProvider')]
-    public function testWrapMethod(object $target): void
+    public function testWrapMethod(object $target, bool $hasAttributes): void
     {
         $envelope = EnvelopeHelper::wrap($target);
         $messageClass = $target instanceof Envelope ? $target->getMessage()::class : $target::class;
@@ -43,12 +43,12 @@ final class EnvelopeHelperTest extends TestCase
     {
         yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
             'target' => new TransactionalOnTerminateMessage(),
-            'has_attributes' => true,
+            'hasAttributes' => true,
         ];
 
         yield ClassHelper::getShortName(Envelope::class) => [
             'target' => Envelope::wrap(new TransactionalOnTerminateMessage()),
-            'has_attributes' => false,
+            'hasAttributes' => false,
         ];
     }
 }

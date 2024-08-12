@@ -63,127 +63,127 @@ final class ClassHelperTest extends TestCase
     public static function shortNameProvider(): iterable
     {
         yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'short_class_name' => 'TransactionalOnTerminateMessage',
+            'className' => TransactionalOnTerminateMessage::class,
+            'shortClassName' => 'TransactionalOnTerminateMessage',
         ];
 
         yield ClassHelper::getShortName(TransactionalOnResponseMessage::class) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'short_class_name' => 'TransactionalOnResponseMessage',
+            'className' => TransactionalOnResponseMessage::class,
+            'shortClassName' => 'TransactionalOnResponseMessage',
         ];
 
         yield ClassHelper::getShortName(TransactionalOnHandledMessage::class) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'short_class_name' => 'TransactionalOnHandledMessage',
+            'className' => TransactionalOnHandledMessage::class,
+            'shortClassName' => 'TransactionalOnHandledMessage',
         ];
 
         yield ClassHelper::getShortName(NonTransactionalMessage::class) => [
-            'class_name' => NonTransactionalMessage::class,
-            'short_class_name' => 'NonTransactionalMessage',
+            'className' => NonTransactionalMessage::class,
+            'shortClassName' => 'NonTransactionalMessage',
         ];
 
         yield 'InvalidClassName' => [
-            'class_name' => 'InvalidClassName',
-            'short_class_name' => 'InvalidClassName',
+            'className' => 'InvalidClassName',
+            'shortClassName' => 'InvalidClassName',
         ];
     }
 
     public static function reflectionProvider(): iterable
     {
         yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'is_null' => false,
+            'className' => TransactionalOnTerminateMessage::class,
+            'isNull' => false,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnResponseMessage::class) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'is_null' => false,
+            'className' => TransactionalOnResponseMessage::class,
+            'isNull' => false,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnHandledMessage::class) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'is_null' => false,
+            'className' => TransactionalOnHandledMessage::class,
+            'isNull' => false,
         ];
 
         yield ClassHelper::getShortName(ExtendedTransactionalMessage::class) => [
-            'class_name' => ExtendedTransactionalMessage::class,
-            'is_null' => false,
+            'className' => ExtendedTransactionalMessage::class,
+            'isNull' => false,
         ];
 
         yield ClassHelper::getShortName(NonTransactionalMessage::class) => [
-            'class_name' => NonTransactionalMessage::class,
-            'is_null' => false,
+            'className' => NonTransactionalMessage::class,
+            'isNull' => false,
         ];
 
         yield 'InvalidClassName' => [
-            'class_name' => 'InvalidClassName',
-            'is_null' => true,
+            'className' => 'InvalidClassName',
+            'isNull' => true,
         ];
     }
 
     public static function parentReflectionProvider(): iterable
     {
         yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'is_null' => true,
+            'className' => TransactionalOnTerminateMessage::class,
+            'isNull' => true,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnResponseMessage::class) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'is_null' => true,
+            'className' => TransactionalOnResponseMessage::class,
+            'isNull' => true,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnHandledMessage::class) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'is_null' => true,
+            'className' => TransactionalOnHandledMessage::class,
+            'isNull' => true,
         ];
 
         yield ClassHelper::getShortName(ExtendedTransactionalMessage::class) => [
-            'class_name' => ExtendedTransactionalMessage::class,
-            'is_null' => false,
+            'className' => ExtendedTransactionalMessage::class,
+            'isNull' => false,
         ];
 
         yield ClassHelper::getShortName(NonTransactionalMessage::class) => [
-            'class_name' => NonTransactionalMessage::class,
-            'is_null' => true,
+            'className' => NonTransactionalMessage::class,
+            'isNull' => true,
         ];
 
         yield 'InvalidClassName' => [
-            'class_name' => 'InvalidClassName',
-            'is_null' => true,
+            'className' => 'InvalidClassName',
+            'isNull' => true,
         ];
     }
 
     public static function reflectionAttributesProvider(): iterable
     {
         yield ClassHelper::getShortName(TransactionalOnTerminateMessage::class) => [
-            'class_name' => TransactionalOnTerminateMessage::class,
-            'is_empty' => false,
+            'className' => TransactionalOnTerminateMessage::class,
+            'isEmpty' => false,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnResponseMessage::class) => [
-            'class_name' => TransactionalOnResponseMessage::class,
-            'is_empty' => false,
+            'className' => TransactionalOnResponseMessage::class,
+            'isEmpty' => false,
         ];
 
         yield ClassHelper::getShortName(TransactionalOnHandledMessage::class) => [
-            'class_name' => TransactionalOnHandledMessage::class,
-            'is_empty' => false,
+            'className' => TransactionalOnHandledMessage::class,
+            'isEmpty' => false,
         ];
 
         yield ClassHelper::getShortName(ExtendedTransactionalMessage::class) => [
-            'class_name' => ExtendedTransactionalMessage::class,
-            'is_empty' => true,
+            'className' => ExtendedTransactionalMessage::class,
+            'isEmpty' => true,
         ];
 
         yield ClassHelper::getShortName(NonTransactionalMessage::class) => [
-            'class_name' => NonTransactionalMessage::class,
-            'is_empty' => true,
+            'className' => NonTransactionalMessage::class,
+            'isEmpty' => true,
         ];
 
         yield 'InvalidClassName' => [
-            'class_name' => 'InvalidClassName',
-            'is_empty' => true,
+            'className' => 'InvalidClassName',
+            'isEmpty' => true,
         ];
     }
 }
